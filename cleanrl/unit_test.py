@@ -1,7 +1,7 @@
 import unittest
 import torch
-import c51
-import rnd_ppo
+import cleanrl.c51 as c51
+import cleanrl.rnd_ppo as rnd_ppo
 
 
 class C51Tests(unittest.TestCase):
