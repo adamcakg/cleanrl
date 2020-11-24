@@ -2,6 +2,7 @@ import unittest
 import torch
 import cleanrl.c51 as c51
 import cleanrl.rnd_ppo as rnd_ppo
+import cleanrl.dqn as dqn
 
 
 class C51Tests(unittest.TestCase):
@@ -32,31 +33,22 @@ class RndPpoTests(unittest.TestCase):
         filter.update(25)
         self.assertEqual(50, filter.update(25))
 
-        
-#       rews = 1
-#        filter = rnd_ppo.RewardForwardFilter(394829482948294829481551616102958)
-#        self.assertEqual(25, filter.update(25))
-#        self.assertEqual(3224, filter.update(3224))
-        
-        
+class DqnTests(unittest.TestCase):
+
+    def test_linear_schedule(self):
+        self.assertEqual(0.9259,dqn.linear_schedule( 1, 0.05, 16000, 1248))
+        self.assertEqual(0.36694375, dqn.linear_schedule( 1, 0.05, 16000, 10662))
+        self.assertEqual(0.4188375, dqn.linear_schedule( 1, 0.05, 16000, 9788))
+        self.assertEqual(0.52654375, dqn.linear_schedule( 1, 0.05, 16000, 7974))
+        self.assertEqual(0.53366875, dqn.linear_schedule( 1, 0.05, 16000, 7854))
+
+    def test_linear_schedule_with_zero_values(self):
+        self.assertEqual(0.05, dqn.linear_schedule(0, 0.05, 16000, 10662))
+        self.assertEqual(0.33362499999999995, dqn.linear_schedule(1, 0, 16000, 10662))
+        self.assertEqual(0, dqn.linear_schedule(1, 0.05, 0, 10662))
+        self.assertEqual(1.0, dqn.linear_schedule(1,0.05, 16000, 0))
 
 
 if __name__ == '__main__':
     unittest.main()
 
-
-
-
-#
-#        self.assertEqual('foo'.upper(), 'FOO')
-#
-#    def test_isupper(self):
-#        self.assertTrue('FOO'.isupper())
-#        self.assertFalse('Foo'.isupper())
-#
-#    def test_split(self):
-#        s = 'hello world'
-#        self.assertEqual(s.split(), ['hello', 'world'])
-#        # check that s.split fails when the separator is not a string
-#        with self.assertRaises(TypeError):
-#            s.split(2)
